@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Contribution
+{% endblock title %}
+
+
+{% block content %}
+    <div class="my-6 p-6 mx-auto bg-gray-100 rounded-xl">
+        <h2 class="text-2xl mb-6 text-center">Add a New Location to the Map</h2>
+        <div class="grid grid-cols-5 gap-6">
+            <div class="col-span-4">
+                <img src="{{location.image.url}}" class="rounded-xl w-full" alt="{{location.name}}">
+            </div>
+            <div class="col-span-1 p-6 bg-gray-100 rounded-xl">
+                <form action="." method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="inline-block mb-2">Name</label><br>
+                        {{form.name}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="inline-block mb-2">Category</label><br>
+                        {{form.category}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="inline-block mb-2">Latitude</label><br>
+                        {{form.latitude}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="inline-block mb-2">Longitude</label><br>
+                        {{form.longitude}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="inline-block mb-2">Image</label><br>
+                        {{form.image}}
+                    </div>
+                    {% if form.errors or form.non_field_errors %}
+                    <div class="mb-3 p-6 bg-red-100 rounded-xl">
+                        {% for field in form %}
+                        {{field.errors}}
+                        {% endfor %}
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+                    <div class="flex justify-end">
+                        <button class="py-2 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    

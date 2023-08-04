@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+Get Directions
+{% endblock title %}
+
+
+{% block content %}
+    <div class="grid grid-cols-5 gap-6">
+        <div class="col-span-3">
+            <img src="{{location.image.url}}" class="rounded-xl" alt="{{location.name}}">
+        </div>
+        <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
+            <h2 class="mb-6 text-2xl text-center">Get Directions</h2>
+            <div class="input-group text-center">
+                <input type="text" class="form-control w-3/4 p-2 mb-2 rounded-xl" placeholder="Choose starting point, or click on the map...">
+                <input type="text" class="form-control w-3/4 p-2 mt-2 rounded-xl" placeholder="Choose destination...">
+                <span class="input-group-text"><i class="bi bi-search"></i></span><br>
+                <div class="flex justify-end my-4 mx-16">
+                    <button class="py-2 px-8 my-4text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Go</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Recent Navigations</h2>
+        <div class="grid grid-cols-3 gap-3">
+            <h3 class="mb-5 font-semibold text-gray-400">
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-lg hover:text-teal-700">1</a></li>
+                    <li><a href="#" class="text-lg hover:text-teal-700">2</a></li>
+                    <li><a href="#" class="text-lg hover:text-teal-700">3</a></li>
+                    <li><a href="#" class="text-lg hover:text-teal-700">4</a></li>
+                </ul>
+            </h3>
+        </div>
+    </div>
+{% endblock content %}
+    
