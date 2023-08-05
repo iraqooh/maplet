@@ -61,20 +61,34 @@ class Contribution(forms.ModelForm):
                 'class' : INPUT_CLASSES
             })
         }
-    # name = forms.CharField(widget=forms.TextInput(attrs={
-    #     'placeholder' : 'Enter name...',
-    #     'class' : 'w-full px-3 py-3 rounded-xl',
-    # }))
-    # category = forms.CharField(widget=forms.TextInput(attrs={
-    #     'placeholder' : 'Select the category...',
-    #     'class' : 'w-full px-3 py-3 rounded-xl',
-    # }))
-    # latitude = forms.FloatField(widget=forms.TextInput(attrs={
-    #     'placeholder' : 'Enter the latitude or select a point on the map...',
-    #     'class' : 'w-full px-3 py-3 rounded-xl',
-    # }))
-    # longitude = forms.FloatField(widget=forms.TextInput(attrs={
-    #     'placeholder' : 'Enter the longitude or select a point on the map...',
-    #     'class' : 'w-full px-3 py-3 rounded-xl',
-    # }))
-    # image = forms.ImageField(widget=forms.ImageField())
+
+class EditLocation(forms.ModelForm):
+    class Meta:
+        model = Location
+        fields = ('name', 'category', 'latitude', 'longitude', 'image',)
+        widgets = {
+            'name' : forms.TextInput(attrs={
+                'class' : INPUT_CLASSES
+            }),
+            'latitude' : forms.NumberInput(attrs={
+                'class' : INPUT_CLASSES
+            }),
+            'longitude' : forms.NumberInput(attrs={
+                'class' : INPUT_CLASSES
+            }),
+            'image' : forms.FileInput(attrs={
+                'class' : INPUT_CLASSES
+            })
+        }
+
+class SearchForm(forms.Form):
+    search_query = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Search...',
+            'label' : '',
+            'name' : 'query',
+            'class' : "p-2 border border-gray-500 rounded-xl",
+            'z-index' : '2'
+        })
+    )

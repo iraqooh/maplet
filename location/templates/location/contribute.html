@@ -7,11 +7,9 @@ Contribution
 
 {% block content %}
     <div class="my-6 p-6 mx-auto bg-gray-100 rounded-xl">
-        <h2 class="text-2xl mb-6 text-center">Add a New Location to the Map</h2>
+        <h2 class="text-2xl mb-6 text-center">{{heading}}</h2>
         <div class="grid grid-cols-5 gap-6">
-            <div class="col-span-4">
-                <img src="{{location.image.url}}" class="rounded-xl w-full" alt="{{location.name}}">
-            </div>
+            <div class="col-span-4 min-h-[500px]" id="map"></div>
             <div class="col-span-1 p-6 bg-gray-100 rounded-xl">
                 <form action="." method="post" enctype="multipart/form-data">
                     {% csrf_token %}

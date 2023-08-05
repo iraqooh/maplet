@@ -2,33 +2,36 @@ from django.shortcuts import render, redirect
 from location.models import *
 from django.shortcuts import get_object_or_404
 from location.models import Location
-from .forms import RegistrationForm
+from .forms import *
 import folium, geocoder
+from geopy.geocoders import Nominatim
 
 # Create your views here.
 def index(request):
-    map = folium.Map(
-        location=[0.332882, 32.568594],
-        zoom_start=17,
-        height="50%",
-        width="75%"
-    )
-    folium.Marker(
-        [0.332691, 32.568596],
-        tooltip='Click for more', popup='Makerere University'
-    ).add_to(map)
-    # folium.Marker(
-    #     [lat, lng],
-    #     tooltip='Click for more', popup=country
-    # ).add_to(map)
-    map = map._repr_html_()
-    location = get_object_or_404(Location, name="Main Building")
+    locations = list(Location.objects.values('latitude', 'longitude'))
+    latitude, longitude, search_query, heading = None, None, None, None
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            search_query = form.cleaned_data['search_query']
+            geolocator = Nominatim(user_agent="my_geocoder")
+            location = geolocator.geocode(search_query)
+            if location:
+                latitude = location.latitude
+                longitude = location.longitude
+                heading = f'{search_query} at {latitude:.6f}, {longitude:.2f}'
+    else:
+        form = SearchForm(initial={'search_query': search_query})
+        heading = 'Explore Makerere University'
     categories = Category.objects.all()
     return render(request, 'core/index.html', {
-        'location' : location,
         'categories' : categories,
-        "map" : map,
-        # "form" : form
+        "form" : form,
+        'latitude' : latitude,
+        'longitude' : longitude,
+        'heading' : heading,
+        'search_query' : search_query,
+        'favorites' : locations
     })
 
 def directions(request):

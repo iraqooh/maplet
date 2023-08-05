@@ -1,11 +1,54 @@
 {% extends 'core/base.html' %}
 
 {% block title %}
-Profile
+{{user.username}}'s Profile
 {% endblock title %}
 
-
 {% block content %}
-    <h1>User's Profile</h1>
+    <div class="grid grid-cols-5 gap-6 pt-6">
+        <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
+            <h2 class="mb-6 text-2xl text-center">Summary</h2>
+            <div class="">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="col-span-1">
+                        <p><b>Username</b></p>
+                    </div>
+                    <div class="col-span-1">
+                        <p><em>{{user.username}}</em></p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="col-span-1">
+                        <p><b>Email</b></p>
+                    </div>
+                    <div class="col-span-1">
+                        <p><em>{{user.email}}</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-3">
+            <img src="{{location.image.url}}" class="rounded-xl" alt="{{location.name}}">
+        </div>
+    </div>
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">My Contributions</h2>
+        <div class="grid grid-cols-3 gap-3 h-full">
+            {% for contribution in contributions %}
+            <div class="cols-span-1">
+                <a href="{% url 'location:place' contribution.name %}">
+                    <div class="grid grid-cols-5 gap-4 items-center bg-white rounded-xl p-2">
+                        <div class="col-span-1">
+                            <img src="{{contribution.image.url}}" class="rounded-xl" alt="{{place.name}}">
+                        </div>
+                        <div class="col-span-4">
+                            <h3 class="text-xl">{{contribution.name}}</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock content %}
     
