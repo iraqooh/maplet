@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from location.models import *
 from django.shortcuts import get_object_or_404
 from location.models import Location
+from django.contrib.auth.decorators import login_required
 from .forms import *
 import folium, geocoder
 from geopy.geocoders import Nominatim
@@ -50,7 +51,7 @@ def index(request):
         "form" : form,
         'favorites_json' : locations
     })
-
+@login_required(login_url='login')
 def directions(request):
     navigation, heading = None, None
     map = folium.Map(
@@ -95,7 +96,7 @@ def directions(request):
         'heading' : heading,
         'form' : form
     })
-
+@login_required(login_url='login')
 def contribute(request):
     return render(request, 'core/contribute.html')
 
