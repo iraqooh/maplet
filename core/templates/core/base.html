@@ -16,8 +16,12 @@
 </head>
 <body>
     <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
+        <div class="logo">
+            <img src="{% static 'did_logo.png' %}"  alt="" width="90" height="75">
+        </div>
         <a href="/" class="text-xl font-semibold">Campus Map</a>
         <div class="space-x-6">
+            
             <a href="{% url 'favorites' %}" class="text-lg font-semibold hover:text-blue-500">Favorites</a>
             <a href="{% url 'directions' %}" class="text-lg font-semibold hover:text-blue-500">Directions</a>
             <a href="{% url 'location:contribute' %}" class="text-lg font-semibold hover:text-blue-500">Contributions</a>
@@ -36,7 +40,7 @@
     <footer class="py-6 px-6 flex justify-between bg-gray-800">
         <div class="w-2/3 pr-10">
             <h3 class="mb-5 font-semibold text-gray-400">About</h3>
-            <p class="text-lg text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit veniam, vero, eos qui error ratione repellendus soluta quo at porro ullam consequatur consectetur esse necessitatibus reiciendis officiis ipsum inventore placeat!</p>
+            <p class="text-lg text-gray-500">This is our First django project to Explore Makerere University main campus map!</p>
         </div>
         <div class="w-1/3">
             <h3 class="mb-5 font-semibold text-gray-400">
