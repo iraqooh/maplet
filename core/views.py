@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth
 from location.models import *
 from django.shortcuts import get_object_or_404
 from location.models import Location
@@ -35,13 +34,13 @@ def index(request):
         'search_query' : search_query,
         'favorites' : locations
     })
-
+@login_required(login_url='login')
 def directions(request):
     location = get_object_or_404(Location, name="Main Building")
     return render(request, 'core/directions.html', {
         'location' : location
     })
-
+@login_required(login_url='login')
 def contribute(request):
     return render(request, 'core/contribute.html')
 
