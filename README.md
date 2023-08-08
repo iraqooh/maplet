@@ -29,4 +29,4 @@ Create a pull request.
 This project is licensed under the Makerere University License.
 
 ## Contact
-For any questions or suggestions, feel free to contact us at iraqooh@gmail.com.
+For any questions or suggestions, feel free to contact me at iraqooh@gmail.com.

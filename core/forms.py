@@ -88,7 +88,27 @@ class SearchForm(forms.Form):
             'placeholder': 'Search...',
             'label' : '',
             'name' : 'query',
-            'class' : "p-2 border border-gray-500 rounded-xl",
+            'class' : "p-2 rounded-xl",
             'z-index' : '2'
+        })
+    )
+
+class NavigationForm(forms.Form):
+    source = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Choose starting point, or click on the map...',
+            'label' : '',
+            'name' : 'source',
+            'class' : "form-control w-3/4 p-2 mt-2 rounded-xl"
+        })
+    )
+    destination = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Choose destination...',
+            'label' : '',
+            'name' : 'destination',
+            'class' : "form-control w-3/4 p-2 mt-2 rounded-xl"
         })
     )

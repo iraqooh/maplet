@@ -4,13 +4,12 @@
 Explore Makerere Campus
 {% endblock title %}
 
-
 {% block content %}
     <div class="mt-6 px-6 py-4 bg-gray-100 rounded-xl">
-        <h2 class="mb-6 text-2xl text-center">Explore Makerere University</h2>
+        <h2 class="mb-6 text-2xl text-center">{{heading}}</h2>
         <div class="relative">
-            <div id="map" class="w-full min-h-[500px] z-0">
-                
+            <div id="map" class="w-full min-h-[500px] max-h-[500px] z-0">
+                {{map | safe}}
             </div>
             <div class="absolute top-6 right-6 z-10">
                 <form method="post" action=".">
@@ -30,7 +29,7 @@ Explore Makerere Campus
         <div class="grid grid-cols-3 gap-3">
             {% for category in categories %}
             <div>
-                <a href="#">
+                <a href="{% url 'favorites' %}">
                     <div class="p-6 bg-white rounded-b-xl">
                         <h2 class="text-2xl">{{category.name}}</h2>
                         <p class="text-gray-500">{{category.locations.count}} Locations</p>
@@ -40,6 +39,6 @@ Explore Makerere Campus
             {% endfor %}
         </div>
     </div>
-    {{ favorites|json_script:"favorites_json" }}
+    {{favorites_json|json_script:"favorites_json"}}
 {% endblock content %}
     

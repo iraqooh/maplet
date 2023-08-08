@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth
 from location.models import *
 from django.shortcuts import get_object_or_404
 from location.models import Location
@@ -10,38 +9,94 @@ from geopy.geocoders import Nominatim
 
 # Create your views here.
 def index(request):
-    locations = list(Location.objects.values('latitude', 'longitude'))
-    latitude, longitude, search_query, heading = None, None, None, None
+    locations = list(Location.objects.all().values('name', 'category', 'latitude', 'longitude', 'image'))
+    categories = Category.objects.all()
+    # favorites_json = serialize('json', locations, fields=('name', 'category', 'latitude', 'longitude', 'image'))
+    latitude, longitude, search_query, heading, map = None, None, None, 'Explore Makerere University', None
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             search_query = form.cleaned_data['search_query']
-            geolocator = Nominatim(user_agent="my_geocoder")
-            location = geolocator.geocode(search_query)
+            # geolocator = Nominatim(user_agent="my_geocoder")
+            # location = geolocator.geocode(search_query)
+            location = geocoder.osm(search_query)
             if location:
-                latitude = location.latitude
-                longitude = location.longitude
+                # latitude = location.latitude
+                # longitude = location.longitude
+                latitude = location.lat
+                longitude = location.lng
                 heading = f'{search_query} at {latitude:.6f}, {longitude:.2f}'
+                map = folium.Map(
+                    location=[latitude, longitude],
+                    zoom_start=17
+                )
+                folium.Marker(
+                        [latitude, longitude],
+                        tooltip=search_query,
+                        popup=f'{search_query}\n{latitude}, {longitude}\n{location.country}'
+                    ).add_to(map)
+                map = map._repr_html_()
+                return render(request, 'core/index.html', {
+                    'categories' : categories,
+                    "form" : form,
+                    'heading' : heading,
+                    'search_query' : search_query,
+                    'map' : map
+                })
     else:
         form = SearchForm(initial={'search_query': search_query})
         heading = 'Explore Makerere University'
-    categories = Category.objects.all()
     return render(request, 'core/index.html', {
         'categories' : categories,
         "form" : form,
-        'latitude' : latitude,
-        'longitude' : longitude,
-        'heading' : heading,
-        'search_query' : search_query,
-        'favorites' : locations
+        'favorites_json' : locations
     })
-
+@login_required(login_url='login')
 def directions(request):
+    navigation, heading = None, None
+    map = folium.Map(
+        location=[0.333566, 32.567469],
+        zoom_start=17
+    )
+    locations = Location.objects.all()
+    for loc in locations:
+        folium.Marker(
+            [loc.latitude, loc.longitude],
+            tooltip=loc.name,
+            popup=f'{loc.name}\n{loc.latitude}, {loc.longitude}'
+        ).add_to(map)
+    map = map._repr_html_()
     location = get_object_or_404(Location, name="Main Building")
-    return render(request, 'core/directions.html', {
-        'location' : location
-    })
 
+    if request.method == 'POST':
+        form = NavigationForm(request.POST)
+        if form.is_valid():
+            source = form.cleaned_data['source']
+            destination = form.cleaned_data['destination']
+            geolocator = Nominatim(user_agent="my_geocoder")
+            source_location = geolocator.geocode(source)
+            destination_location = geolocator.geocode(destination)
+            if source_location and destination_location:
+                heading = f'Navigating from {source} to {destination}'
+                navigation = [{
+                    'source' : source,
+                    'source_latitude' : source_location.latitude,
+                    'source_longitude' : source_location.longitude,
+                    'destination' : destination,
+                    'destination_latitude' : destination_location.latitude,
+                    'destination_longitude' : destination_location.longitude 
+                }]
+    else:
+        form = NavigationForm()
+    return render(request, 'core/directions.html', {
+        'location' : location,
+        'logged_in' : request.user.is_authenticated,
+        'map' : map,
+        'navigation' : navigation,
+        'heading' : heading,
+        'form' : form
+    })
+@login_required(login_url='login')
 def contribute(request):
     return render(request, 'core/contribute.html')
 
