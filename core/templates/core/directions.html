@@ -7,7 +7,9 @@ Get Directions
 
 {% block content %}
     <div class="grid grid-cols-5 gap-6 pt-6">
-        <div class="col-span-3 min-h-[500px] rounded-xl" id="nav_map"></div>
+        <div class="col-span-3 min-h-[500px] rounded-xl" id="nav_map">
+            {{ map | safe }}
+        </div>
         <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
             <h2 class="mb-6 text-2xl text-center">Get Directions</h2>
             <div class="input-group text-center">

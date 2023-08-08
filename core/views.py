@@ -65,13 +65,13 @@ def directions(request):
         location=[0.333566, 32.567469],
         zoom_start=17
     )
-    locations = Location.objects.all()
-    for loc in locations:
-        folium.Marker(
-            [loc.latitude, loc.longitude],
-            tooltip=loc.name,
-            popup=f'{loc.name}\n{loc.latitude}, {loc.longitude}'
-        ).add_to(map)
+    # locations = Location.objects.all()
+    # for loc in locations:
+    #     folium.Marker(
+    #         [loc.latitude, loc.longitude],
+    #         tooltip=loc.name,
+    #         popup=f'{loc.name}\n{loc.latitude}, {loc.longitude}'
+    #     ).add_to(map)
     map = map._repr_html_()
     location = get_object_or_404(Location, name="Main Building")
 
