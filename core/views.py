@@ -121,7 +121,6 @@ def directions(request):
     return render(request, 'core/directions.html', {
         'location' : location,
         'logged_in' : request.user.is_authenticated,
-        'map' : map,
         'navigation' : navigation,
         'heading' : heading,
         'form' : form,
