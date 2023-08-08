@@ -68,15 +68,11 @@ Get Directions
         <h2 class="mb-12 text-2xl text-center">Recent Navigations</h2>
         <div class="grid grid-cols-3 gap-3">
             <h3 class="mb-2 font-semibold text-gray-400">
-                <ul class="space-y-2">
-                    {% for navigation_route in navigation_history %}
-                    <li>
-                        <a href="#" class="text-lg hover:text-teal-700">
-                            {{navigation_route}}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
+                {% for navigation_route in navigation_history %}
+                <a href="#" class="text-lg hover:text-teal-700">
+                    {{navigation_route}}
+                </a>
+                {% endfor %}
             </h3>
         </div>
     </div>
