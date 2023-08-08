@@ -2,14 +2,28 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Location, Category
 from django.contrib.auth.decorators import login_required
 from core.forms import *
+import folium, geocoder
 
 # Create your views here.
 def place(request, name):
     location = get_object_or_404(Location, name=name)
+    map = folium.Map(
+        location=[location.latitude, location.longitude],
+        zoom_start=17
+    )
+    country = geocoder.osm(location.name).country
+    folium.Marker(
+        location=[location.latitude, location.longitude],
+        tooltip=location.name,
+        popup=f'{location.name}\n{location.latitude}, {location.longitude}\n{country}'
+    ).add_to(map)
+    
+    map = map._repr_html_()
     similar_places = Location.objects.filter(category=location.category).exclude(name=name)[0:3]
     return render(request, 'location/place.html', {
-        'location' : location,
-        'similar_places' : similar_places
+        'similar_places' : similar_places,
+        'map' : map,
+        'location' : location
     })
 
 @login_required

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Location
+from .models import *
 
 # Register your models here.
-admin.site.register((Category, Location))
+admin.site.register((Category, Location, Navigation))

@@ -6,19 +6,47 @@
 
 
 {% block content %}
-    <div class="grid grid-cols-5 gap-6">
+    <div class="grid grid-cols-5 gap-6 mt-4">
         <div class="col-span-3">
-            <img src="{{location.image.url}}" class="rounded-xl w-full" alt="{{location.name}}">
+            <div class="w-full min-h-[500px]">
+                {{map | safe}}
+            </div>
         </div>
         <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
             <h2 class="mb-12 text-2xl text-center">Map of {{location.name}}</h2>
-            <div class="input-group w-100 text-center">
-                <input type="search" name="" id="">
-                <input type="text" class="form-control" placeholder="{{location.name}}">
-                <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <div id="container">
+                <div class="grid grid-cols-5 gap-4 items-center bg-white rounded-xl p-2 ">
+                    <div class="col-span-2">
+                        <p class="text-lg">Latitude:</p>
+                    </div>
+                    <div class="col-span-3">
+                        <h3 class="text-xl">{{location.latitude}}</h3>
+                    </div>
+                </div>
+                <div class="grid grid-cols-5 gap-4 mt-4 items-center bg-white rounded-xl p-2 ">
+                    <div class="col-span-2">
+                        <p class="text-lg">Longitude:</p>
+                    </div>
+                    <div class="col-span-3">
+                        <h3 class="text-xl">{{location.longitude}}</h3>
+                    </div>
+                </div>
+                <div class="grid grid-cols-5 gap-4 mt-4 items-center bg-white rounded-xl p-2 ">
+                    <div class="col-span-2">
+                        <p class="text-lg">Category</p>
+                    </div>
+                    <div class="col-span-3">
+                        <h3 class="text-xl">{{location.category}}</h3>
+                    </div>
+                </div>
+                {% if location.image %}
+                <div class="mt-4 items-center bg-white rounded-xl p-2">
+                    <img src="{{location.image.url}}" alt="{{location.name}}" class="rounded-xl w-full">
+                </div>
+                {% endif %}
             </div>
             {% if request.user == location.created_by %}
-            <div class="mt-6 p-6 bg-white rounded-xl text-center">
+            <div class="rounded-xl text-center">
                 <a href="{% url 'location:edit' location.name %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl">Edit Location</a>
                 <a href="{% url 'location:delete' location.name %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl">Remove Location from Map</a>
             </div>
@@ -28,7 +56,7 @@
     <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
         <h2 class="mb-12 text-2xl text-center">Photos</h2>
         <div class="grid grid-cols-3 gap-3">
-            photos
+            
         </div>
     </div>
     <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
@@ -38,9 +66,11 @@
             <div>
                 <a href="{% url 'location:place' place.name %}">
                     <div class="grid grid-cols-5 gap-4 items-center bg-white rounded-xl p-2">
+                        {% if place.image %}
                         <div class="col-span-1">
                             <img src="{{place.image.url}}" class="rounded-xl" alt="{{place.name}}">
                         </div>
+                        {% endif %}
                         <div class="col-span-4">
                             <h3 class="text-xl">{{place.name}}</h3>
                         </div>

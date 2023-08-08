@@ -13,7 +13,9 @@ Favorite Places
             <div>
                 <a href="{% url 'location:place' location.name %}">
                     <div>
+                        {% if location.image %}
                         <img src="{{location.image.url}}" alt="{{location.name}}" class="rounded-t-xl">
+                        {% endif %}
                     </div>
                     <div class="p-6 bg-white rounded-b-xl">
                         <h2 class="text-2xl">{{location.name}}</h2>

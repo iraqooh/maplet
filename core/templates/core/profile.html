@@ -37,10 +37,12 @@
             {% for contribution in contributions %}
             <div class="cols-span-1">
                 <a href="{% url 'location:place' contribution.name %}">
-                    <div class="grid grid-cols-5 gap-4 items-center bg-white rounded-xl p-2">
+                    <div class="grid grid-cols-5 gap-4 items-center bg-white rounded-xl p-2 h-full">
+                        {% if contribution.image %}
                         <div class="col-span-1">
                             <img src="{{contribution.image.url}}" class="rounded-xl" alt="{{place.name}}">
                         </div>
+                        {% endif %}
                         <div class="col-span-4">
                             <h3 class="text-xl">{{contribution.name}}</h3>
                         </div>

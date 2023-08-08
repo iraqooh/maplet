@@ -100,7 +100,7 @@ class NavigationForm(forms.Form):
             'placeholder': 'Choose starting point, or click on the map...',
             'label' : '',
             'name' : 'source',
-            'class' : "form-control w-3/4 p-2 mt-2 rounded-xl"
+            'class' : "form-control w-3/4 p-2 mb-4 rounded-xl",
         })
     )
     destination = forms.CharField(
@@ -109,6 +109,6 @@ class NavigationForm(forms.Form):
             'placeholder': 'Choose destination...',
             'label' : '',
             'name' : 'destination',
-            'class' : "form-control w-3/4 p-2 mt-2 rounded-xl"
+            'class' : "form-control w-3/4 p-2 rounded-xl",
         })
     )
