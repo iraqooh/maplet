@@ -15,17 +15,16 @@
     <link href="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/solid.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200" style="color: #343479;">
+    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200" style="background-color: #38B2AC; color: #FFFFFF;">
         <div class="logo">
             <img src="{% static 'did_logo.png' %}"  alt="" width="90" height="75">
         </div>
         <a href="/" class="text-xl font-semibold">Campus Map</a>
         <div class="space-x-6">
-            
-            <a href="{% url 'favorites' %}" class="text-lg font-semibold hover:text-blue-500">Favorites</a>
-            <a href="{% url 'directions' %}" class="text-lg font-semibold hover:text-blue-500">Directions</a>
-            <a href="{% url 'location:contribute' %}" class="text-lg font-semibold hover:text-blue-500">Contributions</a>
-            <a href="{% url 'profile' %}" class="text-lg font-semibold hover:text-blue-500">Profile</a>
+            <a href="{% url 'favorites' %}" class="text-lg font-semibold hover:text-red-500">Favorites</a>
+            <a href="{% url 'directions' %}" class="text-lg font-semibold hover:text-red-500">Directions</a>
+            <a href="{% url 'location:contribute' %}" class="text-lg font-semibold hover:text-red-500">Contributions</a>
+            <a href="{% url 'profile' %}" class="text-lg font-semibold hover:text-red-500">Profile</a>
             {% if request.user.is_authenticated %}
             {% else %}
             <a href="{% url 'register' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white hover:bg-teal-700 rounded-xl">Register</a>
