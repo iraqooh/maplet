@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from location.models import *
 from django.contrib.auth.decorators import login_required
 from .forms import *
-import folium, geocoder
+import folium, geocoder 
 from geopy.geocoders import Nominatim
 
 # Create your views here.
