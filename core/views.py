@@ -59,11 +59,12 @@ def index(request):
 
 
 def directions(request):
-    navigation, heading = None, None
-    try:
-        profile_photo = ProfilePhoto.objects.get(username=request.user)
-    except ProfilePhoto.DoesNotExist:
-        profile_photo = None
+    navigation, heading, profile_photo = None, None, None
+    if request.user.is_authenticated:
+        try:
+            profile_photo = ProfilePhoto.objects.get(username=request.user)
+        except ProfilePhoto.DoesNotExist:
+            pass
     if request.method == 'POST':
         form = NavigationForm(request.POST)
         if form.is_valid():
