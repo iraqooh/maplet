@@ -7,7 +7,28 @@
 {% load static %}
 
 {% block content %}
+    {% if success %}
+    <div class="bg-blue-100 border-t-4 border-blue-500 rounded-b text-blue-900 px-4 py-3 shadow-md" role="alert">
+        <div class="flex">
+        <div class="py-1"><svg class="fill-current h-6 w-6 text-blue-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.75 10l5.6-5.6c.2-.2.2-.5 0-.7l-.7-.7c-.2-.2-.5-.2-.7 0L11.35 8.65l-5.6-5.6c-.2-.2-.5-.2-.7 0l-.7.7c-.2.2-.2.5 0 .7l5.6 5.6-5.6 5.6c-.2.2-.2.5 0 .7l.7.7c.2.2.5.2.7 0l5.6-5.6 5.6 5.6c.2.2.5.2.7 0l.7-.7c.2-.2.2-.5 0-.7L12.75 10z"/></svg></div>
+        <div>
+            <p class="font-bold">Success</p>
+            <p class="text-sm">Your profile has been successfully updated.</p>
+        </div>
+        </div>
+        <button class="absolute top-0 bottom-0 right-0 px-4 py-3" @click="show = false">
+        <svg class="fill-current h-6 w-6 text-blue-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849c-.195.195-.512.195-.707 0L10 10.707 5.354 15.35a.5.5 0 01-.707-.707L9.293 10l-4.646-4.646a.5.5 0 11.707-.707L10 9.293l4.646-4.646a.5.5 0 01.707.707L10.707 10l4.646 4.646a.5.5 0 010 .707z"/></svg>
+        </button>
+    </div>
+    {% endif %}
     <div class="grid grid-cols-5 gap-6 pt-6">
+        <div class="col-span-1">
+            {% if profile_photo %}
+            <img src="{{ profile_photo.image.url }}" class="profile_pic w-64 h-64" alt="{{profile_photo.username}}">
+            {% else %}
+            <img src="{% static 'images/no_profile_image.png' %}" class="rounded-xl w-64 h-64" alt="{{user.username}}">
+            {% endif %}
+        </div>
         <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
             <h2 class="mb-6 text-2xl text-center">Summary</h2>
             <div class="">
@@ -37,15 +58,18 @@
                 </div>
             </div>
         </div>
-        <div class="col-span-3">
-            <div class="grid grid-cols-3">
-                <div class="cols-span-1">
-                    <img src="{% static 'images/no_profile_image.png' %}" class="rounded-xl w-64 h-64" alt="{{user.username}}">
-                </div>
-                <div class="cols-span-2">
-                    <a href="" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white text-center rounded-xl w-64">Edit Profile</a>
-                    <a href="" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white text-center rounded-xl w-64">Delete Account</a>
-                </div>
+        <div class="col-span-1">
+            <a href="{% url 'edit' %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white text-center rounded-xl w-64">Edit Profile</a>
+            <button id="deleteAccount" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white text-center rounded-xl w-64">Delete Account</button>
+        </div>
+    </div>
+    <div class="fixed inset-0 flex items-center justify-center z-50" id="deletePrompt">
+        <div class="bg-white p-4 rounded-lg shadow-lg z-10 w-128 absolute">
+            <h2 class="text-lg text-center">Are you sure you want to delete your account?</h2>
+            <h2 class="text-lg text-center">This action cannot be undone!</h2>
+            <div class="flex justify-end my-4 mx-16">
+                <a href="{% url 'delete_account' %}" class="flex justify-end mt-4 py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-yellow-500 mr-4">Confirm</a>
+                <button class="flex justify-end mt-4 py-2 px-4 bg-gray-900 text-white rounded-lg hover:bg-gray-500" id="cancel">Cancel</button>
             </div>
         </div>
     </div>

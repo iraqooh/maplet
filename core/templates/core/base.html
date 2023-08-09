@@ -11,12 +11,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-    <link href="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/solid.min.css" rel="stylesheet">
 </head>
 <body>
     <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200" style="background-color: #343479;">
         <div class="logo">
-            <a href="/"><img src="{% static 'did_logo.png' %}"  class="rounded-3xl w-12 h-12" alt="" width="90" height="75"></a>
+            <a href="/"><img src="{% static 'images/logo.png' %}"  class="rounded-3xl w-12 h-12" alt="" width="90" height="75"></a>
         </div>
         <a href="/" class="text-xl font-semibold" style="color:#1ef816fa;">Campus Map</a>
         <div class="space-x-6 flex items-center" style="color:#f8e916fa;">
@@ -26,6 +25,13 @@
             <a href="{% url 'location:contribute' %}" class="text-lg font-semibold hover:text-red-500">Contribute</a>
             <a href="{% url 'profile' %}" class="text-lg font-semibold hover:text-red-500">Profile</a>
             <a href="{% url 'logout' %}" class="text-lg font-semibold hover:text-yellow-500 bg-red-500 text-white p-2 rounded-xl" >Logout</a>
+            <div class="m-2">
+                {% if profile_photo %}
+                <img src="{{ profile_photo.image.url }}" class="profile_pic w-12 h-12" alt="{{profile_photo.username}}">
+                {% else %}
+                <img src="{% static 'images/no_profile_image.png' %}" class="rounded-3xl w-12 h-12" alt="{{user.username}}">
+                {% endif %}
+            </div>
             {% else %}
             <a href="{% url 'register' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-red-700">Register</a>
             <a href="{% url 'login' %}" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-red-700">Login</a>
@@ -36,13 +42,77 @@
         {% block content %}{% endblock content %}
     </div>
 
+    <div class="fixed inset-0 flex items-center justify-center z-50" id="modal">
+        <div class="bg-white p-4 rounded-lg shadow-lg z-10 w-128 absolute">
+            <h2 class="text-lg text-center bg-black-500 text-white">Collaborators</h2>
+            <div class="grid grid-cols-6 gap-4 mt-4 items-center bg-white rounded-xl p-2 ">
+                <div class="col-span-2">
+                    <p class="text-lg">Atong Abraham Kur:</p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">atongkur@gmail.com</h3>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">+256-782-494-005</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-6 gap-4 mt-4 items-center bg-white rounded-xl p-2 ">
+                <div class="col-span-2">
+                    <p class="text-lg">Ngong Abraham:</p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">ngongabraham@gmail.com</h3>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">+256-773-228-057</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-6 gap-4 mt-4 items-center bg-white rounded-xl p-2 ">
+                <div class="col-span-2">
+                    <p class="text-lg">Geriga Sunday Drago:</p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">sundaydrago@gmail.com</h3>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">+256-776-348-853</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-6 gap-4 mt-4 items-center bg-white rounded-xl p-2 ">
+                <div class="col-span-2">
+                    <p class="text-lg">Iraku Harry:</p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">iraqooh@gmail.com</h3>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">+256-773-792-089</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-6 gap-4 mt-4 items-center bg-white rounded-xl p-2 ">
+                <div class="col-span-2">
+                    <p class="text-lg">Namutamba Dorothy Martha:</p>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">dorothymartha@gmail.com</h3>
+                </div>
+                <div class="col-span-2">
+                    <h3 class="text-xl">+256-757-873-258</h3>
+                </div>
+            </div>
+            <div class="flex justify-end my-4 mx-16">
+                <button class="flex justify-end mt-4 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700" id="closeModal">Close</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="py-6 px-6 bg-gray-800" style="background-color: #343479;">
         <div class="flex justify-between items-end max-w-6xl mx-auto">
             <div class="w-2/3 pr-10">
                 <h3 class="mb-5 font-semibold text-white" >© 2023 COCIS, Makerere University, Kampala.</h3>
                 <ul class="space-y-2">
                     <li><a href="https://github.com/iraqooh/maplet/#readme" class="text-white hover:text-red-700">About</a></li>
-                    <li><a href="#" class="text-white hover:text-red-700">Contact</a></li>
+                    <li><a href="#" class="text-white hover:text-red-700" id="openModal">Contact</a></li>
                 </ul>
             </div>
             <div class="w-1/3">
@@ -58,8 +128,8 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
-    <script src="{% static 'script.js' %}"></script>
     <script src="{% static 'explore.js' %}"></script>
     <script src="{% static 'navigate.js' %}"></script>
+    <script src="{% static 'scripted.js' %}"></script>
 </body>
 </html>

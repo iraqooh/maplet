@@ -3,8 +3,8 @@ if(document.getElementById("map"))
 {
     var map = L.map('map').setView([0.333566, 32.567469], 17);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
     const fav_element = document.getElementById("favorites_json")
@@ -22,7 +22,6 @@ if(document.getElementById("map"))
                             <div class="mb-4">
                                 <img src=${favorite.image} alt="Image" class="w-full h-auto rounded-lg">
                             </div>
-
                             <!-- Title Section -->
                             <h2 class="text-2xl font-semibold mb-2">${favorite.name}</h2>
 
@@ -35,7 +34,6 @@ if(document.getElementById("map"))
     }
 
     map.on('click', (event) => {
-
         L.marker([event.latlng.lat, event.latlng.lng]).addTo(map)
             .bindPopup(`<p>Lat: ${event.latlng.lat.toFixed(3)}, Lng: ${event.latlng.lng.toFixed(3)}</p>`)
             .openPopup();

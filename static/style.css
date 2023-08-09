@@ -1,4 +1,7 @@
-#output, #error {
+#output, #error, #modal, #deletePrompt {
     display: none;
 }
 
+.profile_pic {
+    border-radius: 200px;
+}

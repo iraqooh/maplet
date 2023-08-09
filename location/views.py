@@ -3,6 +3,7 @@ from .models import Location, Category
 from django.contrib.auth.decorators import login_required
 from core.forms import *
 import folium, geocoder
+from profiles.models import ProfilePhoto
 
 # Create your views here.
 def place(request, name):
@@ -20,10 +21,15 @@ def place(request, name):
     
     map = map._repr_html_()
     similar_places = Location.objects.filter(category=location.category).exclude(name=name)[0:3]
+    try:
+        profile_photo = ProfilePhoto.objects.get(username=request.user)
+    except ProfilePhoto.DoesNotExist:
+        profile_photo = None
     return render(request, 'location/place.html', {
         'similar_places' : similar_places,
         'map' : map,
-        'location' : location
+        'location' : location,
+        'profile_photo' : profile_photo
     })
 
 @login_required
@@ -37,12 +43,15 @@ def contribute(request):
             return redirect('location:place', name=location.name)
     else: form = Contribution()
     categories = Category.objects.all()
-    location = get_object_or_404(Location, name='Main Building')
+    try:
+        profile_photo = ProfilePhoto.objects.get(username=request.user)
+    except ProfilePhoto.DoesNotExist:
+        profile_photo = None
     return render(request, 'location/contribute.html', {
         'form' : form,
         'categories' : categories,
-        'location' : location,
-        'heading' : 'Add a New Location to the Map'
+        'heading' : 'Add a New Location to the Map',
+        'profile_photo' : profile_photo
     })
 
 @login_required
@@ -73,10 +82,15 @@ def edit(request, name):
     else:
         form = EditLocation(instance=location)
     categories = Category.objects.all()
+    try:
+        profile_photo = ProfilePhoto.objects.get(username=request.user)
+    except ProfilePhoto.DoesNotExist:
+        profile_photo = None
     return render(request, 'location/contribute.html', {
         'form': form,
         'categories': categories,
         'location': location,
         'heading': f'Edit {location.name}',
-        'map' : map
+        'map' : map,
+        'profile_photo' : profile_photo
     })

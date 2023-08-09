@@ -7,11 +7,18 @@ from .forms import *
 import folium, geocoder
 from geopy.geocoders import Nominatim
 from django.db.models import Q
+from profiles.models import ProfilePhoto
 
 # Create your views here.
 def index(request):
+    profile_photo = None
     locations = list(Location.objects.all().values('name', 'category', 'latitude', 'longitude', 'image'))
     categories = Category.objects.all()
+    if request.user.is_authenticated:
+        try:
+            profile_photo = ProfilePhoto.objects.get(username=request.user)
+        except ProfilePhoto.DoesNotExist:
+            pass
     search_query, heading = None, 'Explore Makerere University'
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -37,47 +44,26 @@ def index(request):
                     "form" : form,
                     'heading' : heading,
                     'search_query' : search_query,
-                    'map' : map
+                    'map' : map,
+                    'profile_photo' : profile_photo
                 })
     else:
         form = SearchForm(initial={'search_query': search_query})
-    map = folium.Map(
-        location=[0.3335662314797733, 32.56746934703034],
-        zoom_start=17,
-        height="70%"
-    )
-    for location in locations:
-        folium.Marker(
-            [location["latitude"], location["longitude"]],
-            tooltip=location["name"],
-            popup=f'{location["name"]}\n{location["latitude"]}, {location["longitude"]}\n{geocoder.osm(location["name"]).country}'
-        ).add_to(map)
-    map = map._repr_html_()
     return render(request, 'core/index.html', {
         'categories' : categories,
         "form" : form,
         'favorites_json' : locations,
-        'map' : map,
-        'heading' : heading
+        'heading' : heading,
+        'profile_photo' : profile_photo
     })
 
 
 def directions(request):
     navigation, heading = None, None
-    map = folium.Map(
-        location=[0.333566, 32.567469],
-        zoom_start=17
-    )
-    locations = Location.objects.all()
-    for loc in locations:
-        folium.Marker(
-            [loc.latitude, loc.longitude],
-            tooltip=loc.name,
-            popup=f'{loc.name}\n{loc.latitude}, {loc.longitude}'
-        ).add_to(map)
-    map = map._repr_html_()
-    location = get_object_or_404(Location, name="Main Building")
-
+    try:
+        profile_photo = ProfilePhoto.objects.get(username=request.user)
+    except ProfilePhoto.DoesNotExist:
+        profile_photo = None
     if request.method == 'POST':
         form = NavigationForm(request.POST)
         if form.is_valid():
@@ -126,17 +112,23 @@ def directions(request):
     if request.user.is_authenticated:
         navigation_history = Navigation.objects.filter(created_by=request.user)
     return render(request, 'core/directions.html', {
-        'location' : location,
         'logged_in' : request.user.is_authenticated,
         'navigation' : navigation,
         'heading' : heading,
         'form' : form,
-        'navigation_history' : navigation_history
+        'navigation_history' : navigation_history,
+        'profile_photo' : profile_photo
     })
 
 @login_required(login_url='login')
 def contribute(request):
-    return render(request, 'core/contribute.html')
+    try:
+        profile_photo = ProfilePhoto.objects.get(username=request.user)
+    except ProfilePhoto.DoesNotExist:
+        profile_photo = None
+    return render(request, 'core/contribute.html', {
+        'profile_photo' : profile_photo
+    })
 
 def register(request):
     if request.method == 'POST':
@@ -170,7 +162,42 @@ def favorites(request):
     # Filter locations based on the combined condition
     locations = Location.objects.filter(combined_condition)[:12]
     categories = Category.objects.all()
+    try:
+        profile_photo = ProfilePhoto.objects.get(username=request.user)
+    except ProfilePhoto.DoesNotExist:
+        profile_photo = None
     return render(request, 'core/favorites.html', {
         'locations' : locations,
         'categories' : categories,
+        'profile_photo' : profile_photo
+    })
+
+@login_required
+def delete_account(request):
+    user = request.user
+    user.delete()
+    return redirect('/')
+
+@login_required
+def edit(request):
+    if request.method == 'POST':
+        form = EditAccountForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            uploaded_image = form.cleaned_data['photo']
+            if uploaded_image:
+                # Create and save the ProfilePhoto instance
+                profile_photo = ProfilePhoto(image=uploaded_image, username=request.user)
+                profile_photo.save()
+            data_to_pass = {'success': True}
+            return redirect('/profile/', **data_to_pass)
+    else:
+        form = EditAccountForm(instance=request.user)
+    try:
+        profile_photo = ProfilePhoto.objects.get(username=request.user)
+    except ProfilePhoto.DoesNotExist:
+        profile_photo = None
+    return render(request, 'core/edit.html', {
+        'form' : form,
+        'profile_photo' : profile_photo
     })

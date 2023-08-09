@@ -7,10 +7,14 @@ Explore Makerere Campus
 {% block content %}
     <div class="mt-6 px-6 py-4 bg-gray-100 rounded-xl">
         <h2 class="mb-6 text-2xl text-center">{{heading}}</h2>
-        <div class="relative h-320">
-            <div class="w-full z-0 h-320">
+        <div class="relative">
+            {% if map %}
+            <div class="w-full z-0">
                 {{map | safe}}
             </div>
+            {% else %}
+            <div id="map" class="w-full z-0" style="height:500px;"></div>
+            {% endif %}
             <div class="absolute top-6 right-6 z-10">
                 <form method="post" action=".">
                     {% csrf_token %}
