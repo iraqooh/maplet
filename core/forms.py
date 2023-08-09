@@ -62,25 +62,6 @@ class Contribution(forms.ModelForm):
             })
         }
 
-# class EditLocation(forms.ModelForm):
-#     class Meta:
-#         model = Location
-#         fields = ('name', 'category', 'latitude', 'longitude', 'image',)
-#         widgets = {
-#             'name' : forms.TextInput(attrs={
-#                 'class' : INPUT_CLASSES
-#             }),
-#             'latitude' : forms.NumberInput(attrs={
-#                 'class' : INPUT_CLASSES
-#             }),
-#             'longitude' : forms.NumberInput(attrs={
-#                 'class' : INPUT_CLASSES
-#             }),
-#             'image' : forms.FileInput(attrs={
-#                 'class' : INPUT_CLASSES
-#             })
-#         }
-
 class EditLocation(forms.ModelForm):
     class Meta:
         model = Location

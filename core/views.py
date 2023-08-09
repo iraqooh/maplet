@@ -43,7 +43,8 @@ def index(request):
         form = SearchForm(initial={'search_query': search_query})
     map = folium.Map(
         location=[0.3335662314797733, 32.56746934703034],
-        zoom_start=17
+        zoom_start=17,
+        height="70%"
     )
     for location in locations:
         folium.Marker(

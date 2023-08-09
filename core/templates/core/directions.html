@@ -11,7 +11,7 @@ Get Directions
         <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
             <h2 class="mb-6 text-2xl text-center">Get Directions</h2>
             <div class="input-group text-center">
-                <form action="." method="post" id="navigationForm">
+                <form action="." method="post">
                     {% csrf_token %}
                     {{ form.source }}
                     {{ form.destination }}
