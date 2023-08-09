@@ -165,7 +165,7 @@ def favorites(request):
     combined_condition = latitude_condition & longitude_condition
 
     # Filter locations based on the combined condition
-    locations = Location.objects.filter(combined_condition)
+    locations = Location.objects.filter(combined_condition)[:12]
     categories = Category.objects.all()
     return render(request, 'core/favorites.html', {
         'locations' : locations,
