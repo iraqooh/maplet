@@ -4,17 +4,20 @@
 Favorite Places
 {% endblock title %}
 
+{% load static %}
 
 {% block content %}
     <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
         <h2 class="mb-12 text-2xl text-center">Favorite Places in Makerere University</h2>
         <div class="grid grid-cols-3 gap-3">
             {% for location in locations %}
-            <div>
+            <div class="card">
                 <a href="{% url 'location:place' location.name %}">
                     <div>
                         {% if location.image %}
-                        <img src="{{location.image.url}}" alt="{{location.name}}" class="rounded-t-xl">
+                        <img src="{{location.image.url}}" alt="{{location.name}}" class="rounded-t-xl max-h-[256px] w-full">
+                        {% else %}
+                        <img src="{% static 'images/no_loc_image.jpg' %}" alt="{{location.name}}" class="rounded-t-xl max-h-[256px] w-full">
                         {% endif %}
                     </div>
                     <div class="p-6 bg-white rounded-b-xl">
@@ -23,7 +26,7 @@ Favorite Places
                         <p class="text-gray-500">Location: {{location.latitude}}, {{location.longitude}}</p>
                     </div>
                 </a>
-                <a href="" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white hover:bg-teal-700 rounded-xl">Add to Favorites</a>
+                <!-- <a href="" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white hover:bg-teal-700 rounded-xl">Add to Favorites</a> -->
             </div>
             {% endfor %}
         </div>

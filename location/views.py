@@ -54,17 +54,29 @@ def delete(request, name):
 @login_required
 def edit(request, name):
     location = get_object_or_404(Location, name=name, created_by=request.user)
+    map = folium.Map(
+        location=[location.latitude, location.longitude],
+        zoom_start=17
+    )
+    country = geocoder.osm(location.name).country
+    folium.Marker(
+        location=[location.latitude, location.longitude],
+        tooltip=location.name,
+        popup=f'{location.name}\n{location.latitude}, {location.longitude}\n{country}'
+    ).add_to(map)
+    map = map._repr_html_()
     if request.method == 'POST':
         form = EditLocation(request.POST, request.FILES, instance=location)
         if form.is_valid():
-            location.save()
+            form.save()  # Use form.save() to update the location instance
             return redirect('location:place', name=location.name)
-    else: form = EditLocation(instance=location)
+    else:
+        form = EditLocation(instance=location)
     categories = Category.objects.all()
-    location = get_object_or_404(Location, name='Main Building')
     return render(request, 'location/contribute.html', {
-        'form' : form,
-        'categories' : categories,
-        'location' : location,
-        'heading' : f'Edit {location.name}'
+        'form': form,
+        'categories': categories,
+        'location': location,
+        'heading': f'Edit {location.name}',
+        'map' : map
     })

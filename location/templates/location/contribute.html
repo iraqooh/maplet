@@ -9,7 +9,13 @@ Contribution
     <div class="my-6 p-6 mx-auto bg-gray-100 rounded-xl">
         <h2 class="text-2xl mb-6 text-center">{{heading}}</h2>
         <div class="grid grid-cols-5 gap-6">
+            {% if map %}
+            <div class="col-span-4 min-h-[500px]">
+                {{ map | safe }}
+            </div>
+            {% else %}
             <div class="col-span-4 min-h-[500px]" id="map"></div>
+            {% endif %}
             <div class="col-span-1 p-6 bg-gray-100 rounded-xl">
                 <form action="." method="post" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -42,7 +48,7 @@ Contribution
                     </div>
                     {% endif %}
                     <div class="flex justify-end">
-                        <button class="py-2 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Submit</button>
+                        <button class="py-2 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white" type="submit">Submit</button>
                     </div>
                 </form>
             </div>

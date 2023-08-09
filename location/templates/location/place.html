@@ -4,6 +4,7 @@
 {{location.name}}
 {% endblock title %}
 
+{% load static %}
 
 {% block content %}
     <div class="grid grid-cols-5 gap-6 mt-4">
@@ -39,11 +40,13 @@
                         <h3 class="text-xl">{{location.category}}</h3>
                     </div>
                 </div>
-                {% if location.image %}
                 <div class="mt-4 items-center bg-white rounded-xl p-2">
+                    {% if location.image %}
                     <img src="{{location.image.url}}" alt="{{location.name}}" class="rounded-xl w-full">
+                    {% else %}
+                    <img src="{% static 'images/no_loc_image.jpg' %}" alt="{{location.name}}" class="rounded-xl w-full">
+                    {% endif %}
                 </div>
-                {% endif %}
             </div>
             {% if request.user == location.created_by %}
             <div class="rounded-xl text-center">

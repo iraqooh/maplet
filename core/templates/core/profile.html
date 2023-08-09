@@ -4,6 +4,8 @@
 {{user.username}}'s Profile
 {% endblock title %}
 
+{% load static %}
+
 {% block content %}
     <div class="grid grid-cols-5 gap-6 pt-6">
         <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
@@ -25,10 +27,26 @@
                         <p><em>{{user.email}}</em></p>
                     </div>
                 </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="col-span-1">
+                        <p><b>Date Joined</b></p>
+                    </div>
+                    <div class="col-span-1">
+                        <p><em>{{user.date_joined}}</em></p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-span-3">
-            <img src="{{location.image.url}}" class="rounded-xl" alt="{{location.name}}">
+            <div class="grid grid-cols-3">
+                <div class="cols-span-1">
+                    <img src="{% static 'images/no_profile_image.png' %}" class="rounded-xl w-64 h-64" alt="{{user.username}}">
+                </div>
+                <div class="cols-span-2">
+                    <a href="" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white text-center rounded-xl w-64">Edit Profile</a>
+                    <a href="" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white text-center rounded-xl w-64">Delete Account</a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
@@ -38,11 +56,13 @@
             <div class="cols-span-1">
                 <a href="{% url 'location:place' contribution.name %}">
                     <div class="grid grid-cols-5 gap-4 items-center bg-white rounded-xl p-2 h-full">
-                        {% if contribution.image %}
                         <div class="col-span-1">
-                            <img src="{{contribution.image.url}}" class="rounded-xl" alt="{{place.name}}">
+                            {% if contribution.image %}
+                            <img src="{{contribution.image.url}}" class="rounded-xl h-full" alt="{{contribution.name}}">
+                            {% else %}
+                            <img src="{% static 'images/no_loc_image.jpg' %}" class="rounded-xl h-full" alt="{{contribution.name}}">
+                            {% endif %}
                         </div>
-                        {% endif %}
                         <div class="col-span-4">
                             <h3 class="text-xl">{{contribution.name}}</h3>
                         </div>

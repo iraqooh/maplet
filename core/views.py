@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import *
 import folium, geocoder
 from geopy.geocoders import Nominatim
+from django.db.models import Q
 
 # Create your views here.
 def index(request):
@@ -40,7 +41,6 @@ def index(request):
                 })
     else:
         form = SearchForm(initial={'search_query': search_query})
-        heading = 'Explore Makerere University'
     map = folium.Map(
         location=[0.3335662314797733, 32.56746934703034],
         zoom_start=17
@@ -56,7 +56,8 @@ def index(request):
         'categories' : categories,
         "form" : form,
         'favorites_json' : locations,
-        'map' : map
+        'map' : map,
+        'heading' : heading
     })
 
 def directions(request):
@@ -109,15 +110,18 @@ def directions(request):
                 })
 
                 # Create a Navigation object and save it to the database
-                new_navigation = Navigation(
-                    start=start_location_obj,
-                    destination=end_location_obj,
-                    created_by=request.user
-                )
-                new_navigation.save()
+                if request.user.is_authenticated:
+                    new_navigation = Navigation(
+                        start=start_location_obj,
+                        destination=end_location_obj,
+                        created_by=request.user
+                    )
+                    new_navigation.save()
     else:
         form = NavigationForm()
-    navigation_history = Navigation.objects.filter(created_by=request.user)
+    navigation_history = None
+    if request.user.is_authenticated:
+        navigation_history = Navigation.objects.filter(created_by=request.user)
     return render(request, 'core/directions.html', {
         'location' : location,
         'logged_in' : request.user.is_authenticated,
@@ -147,7 +151,21 @@ def login(request):
     return render(request, 'core/login.html')
 
 def favorites(request):
-    locations = Location.objects.all()
+    # Define latitude and longitude bounds
+    min_latitude = 0.327804
+    max_latitude = 0.33984
+    min_longitude = 32.563417
+    max_longitude = 32.573234
+
+    # Create Q objects to define the filtering conditions
+    latitude_condition = Q(latitude__gte=min_latitude, latitude__lte=max_latitude)
+    longitude_condition = Q(longitude__gte=min_longitude, longitude__lte=max_longitude)
+
+    # Combine the Q objects using logical AND
+    combined_condition = latitude_condition & longitude_condition
+
+    # Filter locations based on the combined condition
+    locations = Location.objects.filter(combined_condition)
     categories = Category.objects.all()
     return render(request, 'core/favorites.html', {
         'locations' : locations,
