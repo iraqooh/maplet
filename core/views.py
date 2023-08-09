@@ -61,6 +61,7 @@ def index(request):
         'heading' : heading
     })
 
+
 def directions(request):
     navigation, heading = None, None
     map = folium.Map(
@@ -95,29 +96,30 @@ def directions(request):
                     'destination_latitude' : destination_location.latitude,
                     'destination_longitude' : destination_location.longitude 
                 }]
-                na_category, _ = Category.objects.get_or_create(name='Unspecified')
-                start_location_obj, _ = Location.objects.get_or_create(name=source, defaults={
-                    'category': na_category,
-                    'latitude': source_location.latitude,
-                    'longitude': source_location.longitude,
-                    'created_by': request.user
-                })
-                
-                end_location_obj, _ = Location.objects.get_or_create(name=destination, defaults={
-                    'category': na_category,
-                    'latitude': destination_location.latitude,
-                    'longitude': destination_location.longitude,
-                    'created_by': request.user
-                })
-
-                # Create a Navigation object and save it to the database
                 if request.user.is_authenticated:
-                    new_navigation = Navigation(
-                        start=start_location_obj,
-                        destination=end_location_obj,
-                        created_by=request.user
-                    )
-                    new_navigation.save()
+                    na_category, _ = Category.objects.get_or_create(name='Unspecified')
+                    start_location_obj, _ = Location.objects.get_or_create(name=source, defaults={
+                        'category': na_category,
+                        'latitude': source_location.latitude,
+                        'longitude': source_location.longitude,
+                        'created_by': request.user
+                    })
+                    
+                    end_location_obj, _ = Location.objects.get_or_create(name=destination, defaults={
+                        'category': na_category,
+                        'latitude': destination_location.latitude,
+                        'longitude': destination_location.longitude,
+                        'created_by': request.user
+                    })
+
+                    # Create a Navigation object and save it to the database
+                    if request.user.is_authenticated:
+                        new_navigation = Navigation(
+                            start=start_location_obj,
+                            destination=end_location_obj,
+                            created_by=request.user
+                        )
+                        new_navigation.save()
     else:
         form = NavigationForm()
     navigation_history = None
