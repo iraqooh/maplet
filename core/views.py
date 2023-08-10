@@ -147,6 +147,7 @@ def login(request):
     return render(request, 'core/login.html')
 
 def favorites(request):
+    profile_photo = None
     # Define latitude and longitude bounds
     min_latitude = 0.327804
     max_latitude = 0.33984
@@ -163,10 +164,12 @@ def favorites(request):
     # Filter locations based on the combined condition
     locations = Location.objects.filter(combined_condition)[:12]
     categories = Category.objects.all()
-    try:
-        profile_photo = ProfilePhoto.objects.get(username=request.user)
-    except ProfilePhoto.DoesNotExist:
-        profile_photo = None
+
+    if request.user.is_authenticated:
+        try:
+            profile_photo = ProfilePhoto.objects.get(username=request.user)
+        except ProfilePhoto.DoesNotExist:
+            pass
     return render(request, 'core/favorites.html', {
         'locations' : locations,
         'categories' : categories,
